@@ -16,20 +16,6 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// var (
-// 	cfgListen          = ":8080"
-// 	cfgCfAPIKey        = ""
-// 	cfgCfAPIEmail      = ""
-// 	cfgCfAPIToken      = ""
-// 	cfgMetricsPath     = "/metrics"
-// 	cfgZones           = ""
-// 	cfgExcludeZones    = ""
-// 	cfgScrapeDelay     = 300
-// 	cfgFreeTier        = false
-// 	cfgBatchSize       = 10
-// 	cfgMetricsDenylist = ""
-// )
-
 func getTargetZones() []string {
 	var zoneIDs []string
 
@@ -134,15 +120,6 @@ func fetchMetrics() {
 }
 
 func runExpoter() {
-	// fmt.Println(" :", viper.GetString("cf_api_email"))
-	// fmt.Println(" :", viper.GetString("cf_api_key"))
-
-	// fmt.Println(" :", viper.GetString("metrics_path"))
-
-	// fmt.Println(":ASD :", viper.GetString("listen"))
-
-	// fmt.Println(" :", cfgListen)
-
 	cfgMetricsPath := viper.GetString("metrics_path")
 
 	if !(len(viper.GetString("cf_api_token")) > 0 || (len(viper.GetString("cf_api_email")) > 0 && len(viper.GetString("cf_api_key")) > 0)) {
@@ -194,19 +171,18 @@ func runExpoter() {
 
 func main() {
 	var cmd = &cobra.Command{
-		Use:   "viper-test",
-		Short: "testing viper",
+		Use:   "cloudflare_exporter",
+		Short: "cloudflare_exporter exports metrics from cloudflare",
 		Run: func(_ *cobra.Command, _ []string) {
 			runExpoter()
 		},
 	}
 
-	//vip := viper.New()
 	viper.AutomaticEnv()
 
 	flags := cmd.Flags()
 
-	flags.String("listen", ":8080", "listen on addr:port ( default :8080), omit addr to listen on all interfaces")
+	flags.String("listen", ":8080", "listen on addr:port (default :8080), omit addr to listen on all interfaces")
 	viper.BindEnv("listen")
 	viper.SetDefault("listen", ":8080")
 
